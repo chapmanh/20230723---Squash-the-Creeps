@@ -1,14 +1,6 @@
 extends Node
 
 @export var mob_scene : PackedScene
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
 
 
 func _on_mob_timer_timeout():
@@ -22,7 +14,12 @@ func _on_mob_timer_timeout():
 	mob_spawn_location.progress_ratio = randf()
 	
 	# Run the initialize method to set the mob's position, rotation and velocity.
-	mob.initialize(mob_spawn_location.position, $Player.position)
+	var player_position = $Player.position
+	player_position.y = mob_spawn_location.position.y
+	mob.initialize(mob_spawn_location.position, player_position)
 	
 	# Spawn the mob by adding it to the Main scene.
 	add_child(mob)
+
+func _on_player_hit():
+	$MobTimer.stop()
